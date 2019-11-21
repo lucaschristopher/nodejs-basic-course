@@ -1,0 +1,20 @@
+Curso básico criação de API's com NodeJS + Express + MongoDB 
+
+  Nesse mini curso você irá aprender conceitos básicos de Node.JS com Express e MongoDB:
+  - criação de endpoints;
+  - criação de rotas;
+  - banco de dados (com modelagem utilizando Mongoose);
+  - criptografia utilizando Bcrypt;
+  - autenticação utilizando JWT (JSON Web Token);
+  - um pouco de async/await do JavaScript;
+  - além de HTTP Status Codes apropriados para as respostas da API.
+  Também poderemos aprender alguns macetes e boas práticas de JavaScript.
+
+  O que você aprenderá...
+  - Criação de API's robustas utilizando NodeJS + Express + MongoDB;
+  - Modelagem básica de banco de dados;
+  - Melhores práticas de JavaScript;
+  - Criptografia de campos sensíveis;
+  - Autenticação de usuários;
+  - Organizar seus projetos em NodeJS.
+
