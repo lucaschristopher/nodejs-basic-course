@@ -6,8 +6,7 @@ const app = express();
 
 // MongoDB Atlas - Cloud DBaaS for MongoDB
 // String of DB connection
-const url =
-  "mongodb+srv://<admin>:<password>@cluster-api-node-pndno.mongodb.net/test?retryWrites=true&w=majority";
+const url = "mongodb://localhost:27017/node-api";
 
 const options = {
   reconnectTries: Number.MAX_VALUE,
@@ -23,7 +22,7 @@ mongoose.set("useCreateIndex", true);
 // Some events for Mongo to stay listening and report if something different happened
 
 mongoose.connection.on("connected", () => {
-  console.log("Application connected on database =D")
+  console.log("Application connected on database =D");
 });
 
 mongoose.connection.on("disconnected", () => {
