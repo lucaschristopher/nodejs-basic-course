@@ -4,47 +4,48 @@ const router = express.Router();
 
 const Users = require("../models/user");
 
-router.get("/", (req, res) => {
-  Users.find({}, (err, data) => {
-    if (err) return res.send({ error: "Error querying users..." });
-    return res.send(data);
-  });
+router.get("/", async (req, res) => {
+  try {
+    const users = await Users.find({});
+    return res.send(users);
+  } catch (error) {
+    return res.send({ error: "Error querying users..." });
+  }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const { email, password } = req.body;
-
   if (!email || !password) return res.send({ error: "Insufficient data..." });
 
-  Users.findOne({ email }, (err, data) => {
-    if (err) return res.send({ error: "Error searching user..." });
-    if (data) return res.send({ error: "User already registered!" });
+  try {
+    if (await Users.findOne({ email }))
+      return res.send({ error: "User already registered!" });
 
-    Users.create(req.body, (err, data) => {
-      if (err) return res.send({ error: "Error creating user..." });
+    const user = await Users.create(req.body);
+    user.password = undefined;
 
-      data.password = undefined;
-      return res.send(data);
-    });
-  });
+    return res.send(user);
+  } catch (error) {
+    return res.send({ error: "Error searching user..." });
+  }
 });
 
-router.post("/auth", (req, res) => {
+router.post("/auth", async (req, res) => {
   const { email, password } = req.body;
-
   if (!email || !password) return res.send({ error: "Insufficient data..." });
 
-  Users.findOne({ email }, (err, data) => {
-    if (err) return res.send({ error: "Error searching user..." });
-    if (!data) return res.send({ error: "Unregistered user!" });
+  try {
+    const user = await Users.findOne({ email }).select("+password");
+    if (!user) return res.send({ error: "Unregistered user!" });
 
-    bcrypt.compare(password, data.password, (err, same) => {
-      if (!same) return res.send({ error: "Authentication error..." });
+    const password_ok = await bcrypt.compare(password, user.password);
+    if (!password_ok) return res.send({ error: "Authentication error..." });
 
-      data.password = undefined;
-      return res.send(data);
-    });
-  }).select("+password");
+    user.password = undefined;
+    return res.send(user);
+  } catch (error) {
+    return res.send({ error: "Error searching user..." });
+  }
 });
 
 module.exports = router;
