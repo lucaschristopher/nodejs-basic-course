@@ -5,11 +5,14 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 const Users = require("../models/user");
+const config = require("../config/config");
 
 // Auxiliar functions
 
 const createUserToken = userId => {
-  return jwt.sign({ id: userId }, "nossacaraquelegal", { expiresIn: "1d" });
+  return jwt.sign({ id: userId }, config.jwtPassword, {
+    expiresIn: config.jwtExpiresIn
+  });
 };
 
 // Routes

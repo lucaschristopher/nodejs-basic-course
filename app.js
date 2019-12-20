@@ -2,11 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
+const config = require("./config/config");
+
 const app = express();
 
 // MongoDB Atlas - Cloud DBaaS for MongoDB
 // String of DB connection
-const url = "mongodb://localhost:27017/node-api";
+const url = config.dbURL;
 
 const options = {
   reconnectTries: Number.MAX_VALUE,
