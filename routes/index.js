@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/", (req, res) => {
+const auth = require("../middlewares/auth");
+
+router.get("/", auth, (req, res) => {
+  console.log(res.locals.authData);
   return res.send({ message: "Alright with the root's GET method." });
 });
 

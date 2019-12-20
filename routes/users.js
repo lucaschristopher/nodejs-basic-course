@@ -1,8 +1,17 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 const Users = require("../models/user");
+
+// Auxiliar functions
+
+const createUserToken = userId => {
+  return jwt.sign({ id: userId }, "nossacaraquelegal", { expiresIn: "1d" });
+};
+
+// Routes
 
 router.get("/", async (req, res) => {
   try {
@@ -24,7 +33,7 @@ router.post("/", async (req, res) => {
     const user = await Users.create(req.body);
     user.password = undefined;
 
-    return res.send(user);
+    return res.send({ user, token: createUserToken(user.id) });
   } catch (error) {
     return res.send({ error: "Error searching user..." });
   }
@@ -42,7 +51,7 @@ router.post("/auth", async (req, res) => {
     if (!password_ok) return res.send({ error: "Authentication error..." });
 
     user.password = undefined;
-    return res.send(user);
+    return res.send({ user, token: createUserToken(user.id) });
   } catch (error) {
     return res.send({ error: "Error searching user..." });
   }
